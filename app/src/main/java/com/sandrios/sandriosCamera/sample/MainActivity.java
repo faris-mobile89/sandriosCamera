@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 
 public class MainActivity extends AppCompatActivity {
-
+//test faris
     private Activity activity;
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
