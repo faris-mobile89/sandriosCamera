@@ -27,7 +27,11 @@ repositories {
     google()
 }
 
+
+
+
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':sandriosCamera')
     implementation "com.android.support:appcompat-v7:27.0.1"
 }

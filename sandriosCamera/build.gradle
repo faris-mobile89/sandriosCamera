@@ -73,7 +73,7 @@ install {
         pom.project {
             name PUBLISH_GROUP_ID
             description 'Simple integration of universal camera in android for easy image and video capture.'
-            url 'https://github.com/sandrios/sandriosCamera'
+            url 'https://github.com/faris-mobile89/sandriosCamera'
             inceptionYear '2017'
 
             packaging 'aar'
@@ -81,12 +81,12 @@ install {
 
             scm {
                 connection 'https://github.com/sandrios/sandriosCamera.git'
-                url 'https://github.com/sandrios/sandriosCamera'
+                url 'https://github.com/faris-mobile89/sandriosCamera'
 
             }
             developers {
                 developer {
-                    name 'arpitgandhi9'
+                    name 'faris-mobile89'
                 }
             }
         }
@@ -106,9 +106,9 @@ bintray {
         desc = 'Android solution to simplify work with different camera apis.'
         licenses = ['MIT']
         labels = ['android', 'camera', 'photo', 'video']
-        websiteUrl = 'https://github.com/sandrios/sandriosCamera'
-        issueTrackerUrl = 'https://github.com/sandrios/sandriosCamera/issues'
-        vcsUrl = 'https://github.com/sandrios/sandriosCamera.git'
+        websiteUrl = 'https://github.com/faris-mobile89/sandriosCamera'
+        issueTrackerUrl = 'https://github.com/faris-mobile89/sandriosCamera/issues'
+        vcsUrl = 'https://github.com/faris-mobile89/sandriosCamera.git'
         version {
             name = PUBLISH_VERSION
             vcsTag = PUBLISH_VERSION
@@ -118,13 +118,17 @@ bintray {
     }
 }
 
+configurations {
+    javadocDeps
+}
+
 repositories {
     jcenter()
     google()
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:support-v4:27.0.1'
     implementation 'com.android.support:appcompat-v7:27.0.1'
     implementation 'com.android.support:recyclerview-v7:27.0.1'
@@ -136,4 +140,15 @@ dependencies {
     implementation 'com.karumi:dexter:4.2.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+
+    implementation 'com.android.support:support-annotations:25.3.1'
+    javadocDeps 'com.android.support:support-annotations:25.3.1'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'androidJavadocs') {
+        task.configure {
+            classpath += configurations.javadocDeps
+        }
+    }
 }
