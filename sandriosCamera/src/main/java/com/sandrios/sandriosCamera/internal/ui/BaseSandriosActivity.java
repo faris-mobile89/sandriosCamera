@@ -286,8 +286,9 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
 
     @Override
     public void onItemClick(Uri filePath) {
-        int mimeType = getMimeType(getActivity(), filePath.toString());
-        SandriosBus.getBus().send(new CameraOutputModel(mimeType, filePath.toString()));
+        //TODO removed by developer
+        //int mimeType = getMimeType(getActivity(), filePath.toString());
+        //SandriosBus.getBus().send(new CameraOutputModel(mimeType, filePath.toString()));
         this.finish();
     }
 
@@ -440,10 +441,11 @@ public abstract class BaseSandriosActivity<CameraId> extends SandriosCameraActiv
                 if (PreviewActivity.isResultConfirm(data)) {
                     String path = PreviewActivity.getMediaFilePatch(data);
                     int mimeType = getMimeType(getActivity(), path);
-                    SandriosBus.getBus().send(new CameraOutputModel(mimeType, path));
-                    this.finish();
+                    //SandriosBus.getBus().send(new CameraOutputModel(mimeType, path));
+                    //this.finish();
+                    cameraControlPanel.setImageGalleryPreview(new CameraOutputModel(mimeType, path));
                 } else if (PreviewActivity.isResultCancel(data)) {
-                    this.finish();
+                    //this.finish();
                 } else if (PreviewActivity.isResultRetake(data)) {
                     //ignore, just proceed the camera
                 }

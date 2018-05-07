@@ -107,6 +107,13 @@ public class SandriosCamera {
                                 mInstance = null;
                             }
                             SandriosBus.complete();
+                        }else if (o instanceof List) {
+                            List<CameraOutputModel> outputModels = (List<CameraOutputModel>) o;
+                            if (cameraCallback != null) {
+                                cameraCallback.onComplete(outputModels);
+                                mInstance = null;
+                            }
+                            SandriosBus.complete();
                         }
                     }
                 });
@@ -135,6 +142,7 @@ public class SandriosCamera {
 
     public interface CameraCallback {
         void onComplete(CameraOutputModel cameraOutputModel);
+        void onComplete(List<CameraOutputModel> cameraOutputModelList);
     }
 
     public class MediaType {

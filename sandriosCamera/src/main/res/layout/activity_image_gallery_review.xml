@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".internal.ui.view.ImageGalleryReview">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#73000000">
+        <ImageView
+            android:id="@+id/ImageViewCancel"
+            android:layout_margin="8dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="centerInside"
+            android:background="@mipmap/icon_cancel"
+            android:layout_alignParentLeft="true" />
+        <ImageView
+            android:id="@+id/imageViewDelete"
+            android:layout_margin="8dp"
+            android:layout_width="18dp"
+            android:layout_height="22dp"
+            android:background="@mipmap/icon_delete"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="12dp"
+        android:background="#73000000">
+        <ImageView
+            android:id="@+id/ImageViewConfirm"
+            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_done_white_24dp"
+            android:layout_alignParentRight="true" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/ImageViewConfirm"
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="70dp" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -29,6 +29,7 @@ import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.ui.BaseSandriosActivity;
 import com.sandrios.sandriosCamera.internal.ui.view.AspectFrameLayout;
+import com.sandrios.sandriosCamera.internal.utils.ImageHelper;
 import com.sandrios.sandriosCamera.internal.utils.Utils;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.view.UCropView;
@@ -386,7 +387,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
             resultIntent.putExtra(RESPONSE_CODE_ARG, BaseSandriosActivity.ACTION_CONFIRM);
             resultIntent.putExtra(FILE_PATH_ARG, previewFilePath);
             try {
-                rotateImageIfRequired(previewFilePath);
+                ImageHelper.rotateImageIfRequired(this, previewFilePath);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -401,43 +402,55 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         finish();
     }
 
-    /**
-     * Rotate an image if required.
-     *
-     * @param selectedImage Image URI
-     * @return The resulted Bitmap after manipulation
-     */
-    private Bitmap rotateImageIfRequired(String selectedImage) throws IOException {
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(selectedImage, bmOptions);
-
-        InputStream input = getContentResolver().openInputStream(Uri.fromFile(new File(selectedImage)));
-        ExifInterface ei;
-        if (Build.VERSION.SDK_INT > 23)
-            ei = new ExifInterface(input);
-        else
-            ei = new ExifInterface(selectedImage);
-
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(bitmap, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(bitmap, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(bitmap, 270);
-            default:
-                return bitmap;
-        }
-    }
-
-    private Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
+//    /**
+//     * Rotate an image if required.
+//     *
+//     * @param selectedImage Image URI
+//     * @return The resulted Bitmap after manipulation
+//     */
+//    private Bitmap rotateImageIfRequired(String selectedImage) throws IOException {
+//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//        bmOptions.inJustDecodeBounds = false;
+//        bmOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+//        bmOptions.inDither = true;
+//        Bitmap bitmap = BitmapFactory.decodeFile(selectedImage, bmOptions);
+//
+//        InputStream input = getContentResolver().openInputStream(Uri.fromFile(new File(selectedImage)));
+//        ExifInterface ei;
+//        if (Build.VERSION.SDK_INT > 23)
+//            ei = new ExifInterface(input);
+//        else
+//            ei = new ExifInterface(selectedImage);
+//
+//        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//
+//        switch (orientation) {
+//            case ExifInterface.ORIENTATION_ROTATE_90:
+//                return rotateImage(bitmap, 90);
+//            case ExifInterface.ORIENTATION_ROTATE_180:
+//                return rotateImage(bitmap, 180);
+//            case ExifInterface.ORIENTATION_ROTATE_270:
+//                return rotateImage(bitmap, 270);
+//            default:
+//                return bitmap;
+//        }
+//    }
+//
+//    private Bitmap rotateImage(Bitmap source, float angle) {
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(angle);
+////        BitmapFactory.Options opts = new BitmapFactory.Options();
+////        opts.inJustDecodeBounds = false;
+////        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+////        opts.inDither = true;
+//
+//        try {
+//            return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+//                    matrix,true);
+//        }catch (OutOfMemoryError error){
+//            return  source;
+//        }
+//    }
 
     @Override
     public void onBackPressed() {

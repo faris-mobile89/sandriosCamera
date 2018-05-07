@@ -1,9 +1,14 @@
 package com.sandrios.sandriosCamera.internal.ui.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,14 +20,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sandrios.sandriosCamera.R;
+import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
 import com.sandrios.sandriosCamera.internal.utils.DateTimeUtils;
+import com.sandrios.sandriosCamera.internal.utils.ImageHelper;
+import com.sandrios.sandriosCamera.internal.utils.SandriosBus;
+import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.view.UCropView;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +56,7 @@ public class CameraControlPanel extends RelativeLayout
     private TextView recordDurationText;
     private TextView recordSizeText;
     private ImageButton settingsButton;
+    private ImageButton buttonConfirm;
     private RecyclerView recyclerView;
 
     private ImageGalleryAdapter imageGalleryAdapter;
@@ -63,6 +78,9 @@ public class CameraControlPanel extends RelativeLayout
     private boolean showImageCrop = false;
     private FileObserver fileObserver;
 
+    private ImageView imagePreview1, imagePreview2, imagePreview3;
+    private List<CameraOutputModel> cameraOutputModelList;
+
     public CameraControlPanel(Context context) {
         this(context, null);
     }
@@ -79,6 +97,7 @@ public class CameraControlPanel extends RelativeLayout
         LayoutInflater.from(context).inflate(R.layout.camera_control_panel_layout, this);
         setBackgroundColor(Color.TRANSPARENT);
         settingsButton = (ImageButton) findViewById(R.id.settings_view);
+        buttonConfirm = (ImageButton) findViewById(R.id.buttonConfirm);
         cameraSwitchView = (CameraSwitchView) findViewById(R.id.front_back_camera_switcher);
         mediaActionSwitchView = (MediaActionSwitchView) findViewById(R.id.photo_video_camera_switcher);
         recordButton = (RecordButton) findViewById(R.id.record_button);
@@ -90,10 +109,26 @@ public class CameraControlPanel extends RelativeLayout
         cameraSwitchView.setOnCameraTypeChangeListener(onCameraTypeChangeListener);
         mediaActionSwitchView.setOnMediaActionStateChangeListener(this);
 
+
+        imagePreview1 = findViewById(R.id.groupImage1);
+        imagePreview2 = findViewById(R.id.groupImage2);
+        imagePreview3 = findViewById(R.id.groupImage3);
+
+
         setOnCameraTypeChangeListener(onCameraTypeChangeListener);
         setOnMediaActionStateChangeListener(onMediaActionStateChangeListener);
         setFlashModeSwitchListener(flashModeSwitchListener);
         setRecordButtonListener(recordButtonListener);
+
+
+        buttonConfirm.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cameraOutputModelList != null)
+                 SandriosBus.getBus().send(cameraOutputModelList);
+                ((Activity)context).finish();
+            }
+        });
 
         settingsButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_settings_white_24dp));
         settingsButton.setOnClickListener(new OnClickListener() {
@@ -108,7 +143,61 @@ public class CameraControlPanel extends RelativeLayout
         else flashSwitchView.setVisibility(GONE);
 
         countDownTimer = new TimerTask(recordDurationText);
+
+        cameraOutputModelList = new ArrayList<>();
+
     }
+
+    public void setImageGalleryPreview(CameraOutputModel cameraOutputModel){
+        cameraOutputModelList.add(cameraOutputModel);
+
+        imagePreview1.setImageResource(0);
+        imagePreview2.setImageResource(0);
+        imagePreview3.setImageResource(0);
+
+        for(int index = 0; index < cameraOutputModelList.size(); index++){
+
+            CameraOutputModel item =  cameraOutputModelList.get(index);
+
+            if (item.getType() == SandriosCamera.MediaType.PHOTO){
+
+                File previewFilePath = new File(item.getPath());
+                if (previewFilePath.exists()){
+                    try {
+                        Bitmap bitmap = ImageHelper.rotateImageIfRequired(context, item.getPath());
+                        if (index == 0) {
+                            imagePreview1.setImageBitmap(bitmap);
+                            imagePreview1.setOnClickListener(imageReviewClickListener);
+                        }else if (index == 1) {
+                            imagePreview2.setImageBitmap(bitmap);
+                            imagePreview2.setOnClickListener(imageReviewClickListener);
+                        }else if (index == 2) {
+                            imagePreview3.setImageBitmap(bitmap);
+                            imagePreview3.setOnClickListener(imageReviewClickListener);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }else if (item.getType() == SandriosCamera.MediaType.VIDEO){
+                imagePreview3.setImageResource(R.drawable.icon_video);
+            }
+        }
+    }
+
+    private OnClickListener imageReviewClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+//            Intent intent = new Intent(context, ImageGalleryReview.class);
+//            Bundle extra = new Bundle();
+//            extra.putSerializable("objects", cameraOutputModelList);
+//            intent.putExtra("extra", extra);
+//            context.startActivity(intent);
+
+        }
+    };
 
     public void postInit(int mediatype) {
         if (mediatype != 0 && mediatype == CameraConfiguration.VIDEO)

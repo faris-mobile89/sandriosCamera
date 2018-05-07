@@ -2,6 +2,8 @@ package com.sandrios.sandriosCamera.internal.utils;
 
 import android.support.annotation.RestrictTo;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 

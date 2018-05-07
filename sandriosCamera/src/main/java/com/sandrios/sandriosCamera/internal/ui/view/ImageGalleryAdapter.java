@@ -16,10 +16,12 @@ import com.bumptech.glide.Glide;
 import com.sandrios.sandriosCamera.R;
 import com.sandrios.sandriosCamera.internal.SandriosCamera;
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
+import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
 import com.sandrios.sandriosCamera.internal.ui.BaseSandriosActivity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Arpit Gandhi
@@ -84,6 +86,16 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
                 }
             }
 
+        }
+    }
+
+    public ImageGalleryAdapter(Context context, List<CameraOutputModel> cameraOutputModels){
+        this.context = context;
+        pickerTiles = new ArrayList<>();
+
+        for (int i = 0; i < cameraOutputModels.size(); i++) {
+            File imageFile = new File(cameraOutputModels.get(i).getPath());
+            pickerTiles.add(new PickerTile(Uri.fromFile(imageFile)));
         }
     }
 

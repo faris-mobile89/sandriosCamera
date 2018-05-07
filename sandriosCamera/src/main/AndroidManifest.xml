@@ -29,11 +29,11 @@
             android:name=".internal.ui.preview.PreviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullscreen" />
-
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullscreen.Crop" />
+        <activity android:name=".internal.ui.view.ImageGalleryReview"></activity>
     </application>
 
 </manifest>

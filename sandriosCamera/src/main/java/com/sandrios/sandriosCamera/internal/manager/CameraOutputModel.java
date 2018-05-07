@@ -1,10 +1,12 @@
 package com.sandrios.sandriosCamera.internal.manager;
 
+import java.io.Serializable;
+
 /**
  * Created by Arpit Gandhi
  */
 
-public class CameraOutputModel {
+public class CameraOutputModel implements Serializable{
     private int type;
     private String path;
 

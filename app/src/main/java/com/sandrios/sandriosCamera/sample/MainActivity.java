@@ -12,6 +12,7 @@ import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration;
 import com.sandrios.sandriosCamera.internal.manager.CameraOutputModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sample for Sandrios Camera library
@@ -40,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("Type", "" + model.getType());
                                     Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
                                 }
+
+                                @Override
+                                public void onComplete(List<CameraOutputModel> cameraOutputModelList) {
+                                    Log.e("Files count:", "" + cameraOutputModelList.size());
+                                }
                             });
                     break;
                 case R.id.withoutPicker:
@@ -54,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("File", "" + model.getPath());
                                     Log.e("Type", "" + model.getType());
                                     Toast.makeText(getApplicationContext(), "Media captured.", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onComplete(List<CameraOutputModel> cameraOutputModelList) {
+                                    Log.e("Files count:", "" + cameraOutputModelList.size());
                                 }
                             });
                     break;
